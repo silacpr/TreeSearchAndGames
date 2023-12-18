@@ -5,85 +5,94 @@ import ia.framework.jeux.Game;
 import ia.framework.jeux.GameState;
 import ia.framework.jeux.Player;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MinMaxPlayer extends Player {
 
-    private static final int INFINITY = Integer.MAX_VALUE;
-
     public MinMaxPlayer(Game g, boolean p1) {
         super(g, p1);
-        name = "MinMaxPlayer";
+        name = "MinMax";
     }
 
     @Override
     public Action getMove(GameState state) {
-        int currentPlayer = (player == PLAYER1) ? 1 : 2;
-        return minimax((GameState) state, currentPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE).getSecond();
+        System.out.println("AhHH");
+        return getMinMaxMove(state);
     }
 
-    private Pair<Integer, Action> minimax(GameState state, int player, int alpha, int beta) {
-        if (game.endOfGame(state)) {
-            return new Pair<>(evaluate(state), null);
-        }
+    public Action getMinMaxMove(GameState state) {
+        return minMaxAlphaBeta(state).action;
+    }
 
-        int currentPlayer = (player == 1) ? PLAYER1 : PLAYER2;
-        Action bestMove = null;
-
-        if (currentPlayer == player) {
-            int maxValue = Integer.MIN_VALUE;
-            for (Action action : game.getActions(state)) {
-                GameState nextState = (GameState) game.doAction(state, action);
-                int value = minimax(nextState, 3 - player, alpha, beta).getFirst();
-                if (value > maxValue) {
-                    maxValue = value;
-                    bestMove = action;
-                }
-                alpha = Math.max(alpha, maxValue);
-                if (maxValue >= beta) {
-                    break;
-                }
-            }
-            return new Pair<>(maxValue, bestMove);
+    public SearchResult minMaxAlphaBeta(GameState state) {
+        if (player == 1) {
+            return minValeur(state, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         } else {
-            int minValue = Integer.MAX_VALUE;
-            for (Action action : game.getActions(state)) {
-                GameState nextState = (GameState) game.doAction(state, action);
-                int value = minimax(nextState, 3 - player, alpha, beta).getFirst();
-                if (value < minValue) {
-                    minValue = value;
-                    bestMove = action;
-                }
-                beta = Math.min(beta, minValue);
-                if (minValue <= alpha) {
-                    break;
-                }
+            return maxValeur(state, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        }
+    }
+
+    private SearchResult maxValeur(GameState state, double alpha, double beta) {
+        if (game.endOfGame(state)) {
+            return new SearchResult(state.getGameValue(), null);
+        }
+
+        double vmax = Double.NEGATIVE_INFINITY;
+        Action cmax = null;
+
+        List<Action> actions = game.getActions(state);
+        for (Action c : actions) {
+            GameState nextState = (GameState) game.doAction(state, c);
+            double value = minValeur(nextState, alpha, beta).value;
+
+            if (value > vmax) {
+                vmax = value;
+                cmax = c;
             }
-            return new Pair<>(minValue, bestMove);
+
+            alpha = Math.max(alpha, vmax);
+            if (vmax >= beta) {
+                break;  // Coupure beta
+            }
         }
+
+        return new SearchResult(vmax, cmax);
     }
 
-    // Méthode d'évaluation spécifique à MinMaxPlayer
-    private int evaluate(GameState state) {
-        // Implémente la logique d'évaluation spécifique à MinMaxPlayer
-        return 0;
+    private SearchResult minValeur(GameState state, double alpha, double beta) {
+        if (game.endOfGame(state)) {
+            return new SearchResult(state.getGameValue(), null);
+        }
+
+        double vmin = Double.POSITIVE_INFINITY;
+        Action cmin = null;
+
+        List<Action> actions = game.getActions(state);
+        for (Action c : actions) {
+            GameState nextState = (GameState) game.doAction(state, c);
+            double value = maxValeur(nextState, alpha, beta).value;
+
+            if (value < vmin) {
+                vmin = value;
+                cmin = c;
+            }
+
+            beta = Math.min(beta, vmin);
+            if (vmin <= alpha) {
+                break;  // Coupure alpha
+            }
+        }
+
+        return new SearchResult(vmin, cmin);
     }
 
-    private static class Pair<T, U> {
-        private final T first;
-        private final U second;
+    private static class SearchResult {
+        double value;
+        Action action;
 
-        private Pair(T first, U second) {
-            this.first = first;
-            this.second = second;
-        }
-
-        public T getFirst() {
-            return first;
-        }
-
-        public U getSecond() {
-            return second;
+        public SearchResult(double value, Action action) {
+            this.value = value;
+            this.action = action;
         }
     }
 }
