@@ -210,7 +210,7 @@ public class ArgParse {
 
         case "minmax":
             System.out.println("c'est minmax");
-            return new MinMaxPlayer(game, p1);
+            return new MinMaxPlayerBis(game, p1);
         default :
             System.out.println("Joueur inconnu");
             usage();

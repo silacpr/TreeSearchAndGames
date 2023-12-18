@@ -5,7 +5,11 @@ import ia.framework.jeux.Game;
 import ia.framework.jeux.GameState;
 import ia.framework.jeux.Player;
 
+import java.util.ArrayList;
+
 public class MinMaxPlayer extends Player {
+
+    private static final int INFINITY = Integer.MAX_VALUE;
 
     public MinMaxPlayer(Game g, boolean p1) {
         super(g, p1);
@@ -14,53 +18,72 @@ public class MinMaxPlayer extends Player {
 
     @Override
     public Action getMove(GameState state) {
-        return minimaxAlphaBeta(state, Integer.MIN_VALUE, Integer.MAX_VALUE, true).action;
+        int currentPlayer = (player == PLAYER1) ? 1 : 2;
+        return minimax((GameState) state, currentPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE).getSecond();
     }
 
-    private SearchResult minimaxAlphaBeta(GameState state, int alpha, int beta, boolean maximizingPlayer) {
+    private Pair<Integer, Action> minimax(GameState state, int player, int alpha, int beta) {
         if (game.endOfGame(state)) {
-            return new SearchResult(evaluate(state), null);
+            return new Pair<>(evaluate(state), null);
         }
 
-        int bestValue = maximizingPlayer ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        int currentPlayer = (player == 1) ? PLAYER1 : PLAYER2;
         Action bestMove = null;
 
-        for (Action action : game.getActions(state)) {
-            GameState nextState = (GameState) game.doAction(state, action);
-            SearchResult result = minimaxAlphaBeta(nextState, alpha, beta, !maximizingPlayer);
-
-            if ((maximizingPlayer && result.value > bestValue) || (!maximizingPlayer && result.value < bestValue)) {
-                bestValue = result.value;
-                bestMove = action;
+        if (currentPlayer == player) {
+            int maxValue = Integer.MIN_VALUE;
+            for (Action action : game.getActions(state)) {
+                GameState nextState = (GameState) game.doAction(state, action);
+                int value = minimax(nextState, 3 - player, alpha, beta).getFirst();
+                if (value > maxValue) {
+                    maxValue = value;
+                    bestMove = action;
+                }
+                alpha = Math.max(alpha, maxValue);
+                if (maxValue >= beta) {
+                    break;
+                }
             }
-
-            if (maximizingPlayer) {
-                alpha = Math.max(alpha, bestValue);
-            } else {
-                beta = Math.min(beta, bestValue);
+            return new Pair<>(maxValue, bestMove);
+        } else {
+            int minValue = Integer.MAX_VALUE;
+            for (Action action : game.getActions(state)) {
+                GameState nextState = (GameState) game.doAction(state, action);
+                int value = minimax(nextState, 3 - player, alpha, beta).getFirst();
+                if (value < minValue) {
+                    minValue = value;
+                    bestMove = action;
+                }
+                beta = Math.min(beta, minValue);
+                if (minValue <= alpha) {
+                    break;
+                }
             }
-
-            if (beta <= alpha) {
-                break; // Élagage alpha-beta
-            }
+            return new Pair<>(minValue, bestMove);
         }
-
-        return new SearchResult(bestValue, bestMove);
     }
 
+    // Méthode d'évaluation spécifique à MinMaxPlayer
     private int evaluate(GameState state) {
-        // Implémentez votre fonction d'évaluation ici
-        // Elle doit retourner une valeur numérique représentant l'estimation de la qualité de l'état.
+        // Implémente la logique d'évaluation spécifique à MinMaxPlayer
         return 0;
     }
 
-    private static class SearchResult {
-        int value;
-        Action action;
+    private static class Pair<T, U> {
+        private final T first;
+        private final U second;
 
-        public SearchResult(int value, Action action) {
-            this.value = value;
-            this.action = action;
+        private Pair(T first, U second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        public T getFirst() {
+            return first;
+        }
+
+        public U getSecond() {
+            return second;
         }
     }
 }
