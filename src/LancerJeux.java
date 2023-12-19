@@ -33,9 +33,9 @@ public class LancerJeux {
         String p2_type = ArgParse.getPlayer2FromCmd(args);
  
         // créer un jeux, des joueurs et le moteur de jeux
-        Game game = ArgParse.makeGame(game_name);
-        Player p1 = ArgParse.makePlayer("minmax", game, true);
-        Player p2 = ArgParse.makePlayer(p2_type, game, false);
+        Game game = ArgParse.makeGame("c4");
+        Player p1 = ArgParse.makePlayer("minmaxab", game, true);
+        Player p2 = ArgParse.makePlayer("hum", game, false);
         GameEngine game_engine = new GameEngine(game, p1, p2);
 
         // on joue jusqu'à la fin

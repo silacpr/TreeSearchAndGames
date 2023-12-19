@@ -25,10 +25,10 @@ public class MinMaxPlayerBis extends Player {
     }
 
     public SearchResult minMaxAlphaBeta(GameState state) {
-        if (player == 1) {
-            return minValeur(state, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-        } else {
+        if (player == 0) {
             return maxValeur(state, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        } else {
+            return minValeur(state, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         }
     }
 
@@ -50,10 +50,15 @@ public class MinMaxPlayerBis extends Player {
                 cmax = c;
             }
 
+
+
+            /*
             alpha = Math.max(alpha, vmax);
             if (vmax >= beta) {
                 break;  // Coupure beta
             }
+
+             */
         }
 
         return new SearchResult(vmax, cmax);
@@ -77,10 +82,13 @@ public class MinMaxPlayerBis extends Player {
                 cmin = c;
             }
 
+            /*
             beta = Math.min(beta, vmin);
             if (vmin <= alpha) {
                 break;  // Coupure alpha
             }
+
+             */
         }
 
         return new SearchResult(vmin, cmin);

@@ -16,7 +16,8 @@ public class EightPuzzleState extends State implements HasHeuristic{
 
     // Le puzzle : tableau de 9 entiers
     // Avec board[0] en haut à gauche board[8] en bas à droite.
-    // Les valeurs représentent les pièces, avec 0 pour la case vide 
+    // Les valeurs représentent les pièces, avec 0 pour la case vide
+
 
     private int[] board = null;
 
@@ -90,6 +91,7 @@ public class EightPuzzleState extends State implements HasHeuristic{
      */
     
     public void moveGapRight() {
+
 		int gapPos = getGapPosition();
 		int x = getXCoord(gapPos);
 		int y = getYCoord(gapPos);

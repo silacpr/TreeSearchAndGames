@@ -208,9 +208,12 @@ public class ArgParse {
             System.out.println("c'est humain");
             return new HumanPlayer(game, p1);
 
-        case "minmax":
+        case "minmaxab":
             System.out.println("c'est minmax");
-            return new MinMaxPlayerBis(game, p1);
+            return new MinMaxPlayer(game, p1);
+        case "minmax":
+                System.out.println("c'est minmax");
+                return new MinMaxPlayerBis(game, p1);
         default :
             System.out.println("Joueur inconnu");
             usage();

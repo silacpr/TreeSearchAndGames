@@ -11,9 +11,6 @@ import ia.framework.recherche.SearchProblem;
  *
  */
 public class EightPuzzle extends SearchProblem {
-
-
-    
     // Les actions possible pour le carré vide
        
     public static final Action UP    = new Action("Up");
@@ -26,7 +23,8 @@ public class EightPuzzle extends SearchProblem {
      */
     
     public static final EightPuzzleState GOAL_STATE = 
-        new EightPuzzleState(new int[] {1,2,3,4,5,6,7,8,0} );
+        new EightPuzzleState(new int[] {1,2,3,4,5,6,7,8,0}
+        );
 
     /**
      * Crée une instance du problème du taquin
@@ -60,8 +58,7 @@ public class EightPuzzle extends SearchProblem {
     }
     
     public State doAction(State s, Action a){
-
-        // on copie l'état courent et on le modifie
+        // on copie l'état courant et on le modifie
         EightPuzzleState b = (EightPuzzleState) s.clone();
         if (a == LEFT)
             b.moveGapLeft();
