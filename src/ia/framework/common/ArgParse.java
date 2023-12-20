@@ -156,6 +156,8 @@ public class ArgParse {
             return new Vacuum();
         case "puz":
             return new EightPuzzle();
+        case "rh":
+            return new RushHour();
         default :
             System.out.println("Problème inconnu");
             usage();
@@ -281,6 +283,8 @@ public class ArgParse {
             return new VacuumState();
         case "puz":
             return new EightPuzzleState();
+        case "rh":
+            return new RushHourState();
         }
     }
 }

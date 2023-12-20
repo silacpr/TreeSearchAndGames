@@ -15,18 +15,22 @@ public class LancerRecherche {
 
         // fixer le message d'aide
         ArgParse.setUsage
-            ("Utilisation :\n\n"
-             + "java LancerRecherche [-prob problem] [-algo algoname]"
-             + "[-v] [-h]\n"
-             + "-prob : Le nom du problem {dum, map, vac, puz}. Par défautl vac\n"
-             + "-algo : L'agorithme {rnd, bfs, dfs, ucs, gfs, astar}. Par défault rnd\n"
-             + "-v    : Rendre bavard (mettre à la fin)\n"
-             + "-h    : afficher ceci (mettre à la fin)"
+            ("""
+                    Utilisation :
+
+                    java LancerRecherche [-prob problem] [-algo algoname][-v] [-h]
+                    -prob : Le nom du problem {dum, map, vac, puz}. Par défautl vac
+                    -algo : L'agorithme {rnd, bfs, dfs, ucs, gfs, astar}. Par défault rnd
+                    -v    : Rendre bavard (mettre à la fin)
+                    -h    : afficher ceci (mettre à la fin)"""
              );
 
         
         // récupérer les option de la ligne de commande
-        String prob_name = ArgParse.getProblemFromCmd(args);
+//        String prob_name = ArgParse.getProblemFromCmd(args);
+//        String algo_name = ArgParse.getAlgoFromCmd(args);
+
+        String prob_name = new String("rh");
         String algo_name = ArgParse.getAlgoFromCmd(args);
 
         // créer un problem, un état intial et un  algo

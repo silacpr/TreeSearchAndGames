@@ -31,7 +31,6 @@ public class EightPuzzle extends SearchProblem {
      *
      */
     public EightPuzzle(){
-
         // La liste des actions possibles  
         ACTIONS = new Action[] { UP, LEFT, DOWN, RIGHT };
     }

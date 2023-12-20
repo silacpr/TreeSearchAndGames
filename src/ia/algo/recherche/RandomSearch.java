@@ -24,6 +24,7 @@ public class RandomSearch extends TreeSearch{
         // On commence à létat initial
         SearchNode node = SearchNode.makeRootSearchNode(intial_state);
         State state = node.getState();
+        System.out.println("State randomSearch : "+state);
 
         if (ArgParse.DEBUG)
             System.out.print("["+state);
@@ -31,13 +32,14 @@ public class RandomSearch extends TreeSearch{
         while( !problem.isGoalState(state) ) {
             // Les actions possibles depuis cette état
             ArrayList<Action> actions = problem.getActions(state);
-            
+            System.out.println(actions.size());
             // En chosir une au hasard
             Action a = actions.get(rng.nextInt(actions.size()));
 
             // Executer et passer a l'état suivant
             node = SearchNode.makeChildSearchNode(problem, node, a);
             state = node.getState();
+            //System.out.println("State randomSearch : "+state);
 
             if (ArgParse.DEBUG)
                 System.out.print(" + " +a+ "] -> ["+state);

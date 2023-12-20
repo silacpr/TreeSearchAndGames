@@ -11,6 +11,7 @@ public class Action implements Comparable<Action> {
      * Une action est juste une instance qui a un nom  
      * pour mieux les lire :) 
      */
+
     
     private final String name; 
 
