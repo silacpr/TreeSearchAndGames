@@ -18,7 +18,6 @@ public class Vacuum extends Problem {
     public static VacuumState RD_ = new VacuumState(1,new boolean[]{true,  false});
     public static VacuumState L__ = new VacuumState(0,new boolean[]{false, false});
     public static VacuumState R__ = new VacuumState(1,new boolean[]{false, false});
-    
 
     
     public Vacuum() {

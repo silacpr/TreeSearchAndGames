@@ -12,6 +12,9 @@ public class RushHourState extends State implements HasHeuristic {
 
     private int[][] board;
     public int[][] vehicules;
+    public int[] convV;
+
+
     /*
     numéro du véhicule
     pos x
@@ -26,12 +29,19 @@ public class RushHourState extends State implements HasHeuristic {
         vehicules = new int[][] {
             {0,0,2,0,2},
             {1,2,0,1,3},
-            {2,0,3,0,3},
+            {2,0,3,0,3},//modif taille pour que ce soit une v
             {3,4,0,0,2},
             {4,5,3,1,3}
         };
 
         board = convertirVehiculesToBoard();
+        convV = convertTo1DArray(vehicules);
+    }
+
+    public RushHourState(int[][] vehicules) {
+        this.vehicules = vehicules.clone();
+        board = convertirVehiculesToBoard();
+        convV = convertTo1DArray(vehicules);
     }
 
     //méthode pour convertir
@@ -39,15 +49,21 @@ public class RushHourState extends State implements HasHeuristic {
 
     public int[][] convertirVehiculesToBoard() {
         int[][] b = new int[][]{
-                {-1,-1,-1,-1,-1,-1},
-                {-1,-1,-1,-1,-1,-1},
-                {-1,-1,-1,-1,-1,-1},
-                {-1,-1,-1,-1,-1,-1},
-                {-1,-1,-1,-1,-1,-1},
-                {-1,-1,-1,-1,-1,-1}
+//                {-1,-1,-1,-1,-1,-1},
+//                {-1,-1,-1,-1,-1,-1},
+//                {-1,-1,-1,-1,-1,-1},
+//                {-1,-1,-1,-1,-1,-1},
+//                {-1,-1,-1,-1,-1,-1},
+//                {-1,-1,-1,-1,-1,-1}
+                {-1,-2,-3,-4,-5,-6},
+                {-7,-8,-9,-10,-11,-12},
+                {-13,-14,-15,-16,-17,-18},
+                {-19,-20,-21,-22,-23,-24},
+                {-25,-26,-27,-28,-29,-30},
+                {-31,-32,-33,-34,-35,-36}
         };
 
-        Arrays.stream(vehicules).forEach(e-> System.out.println(Arrays.toString(e)));
+        //Arrays.stream(vehicules).forEach(e-> System.out.println(Arrays.toString(e)));
 
 
         Arrays.stream(vehicules).forEach((vehicule) -> {
@@ -70,23 +86,17 @@ public class RushHourState extends State implements HasHeuristic {
         return b;
     }
 
-
-    public RushHourState(int[][] vehicules) {
-        this.vehicules = vehicules.clone();
-        board = convertirVehiculesToBoard();
-    }
-
     /*
     Déplacer un véhicule vers l'avant UP, RIGHT
      */
     public void moveForward(int num){
-        System.out.println("avant MoveForward");
-        Arrays.stream(vehicules).forEach(e-> System.out.println(Arrays.toString(e)));
+        //System.out.println("avant MoveForward");
+        //Arrays.stream(vehicules).forEach(e-> System.out.println(Arrays.toString(e)));
         for (int i = 0 ; i < this.vehicules.length ; i++) {
             if (this.vehicules[i][0]==num){
                 if (this.vehicules[i][3]==1){
                     //System.out.println("valeur position du véhicule avant : "+this.vehicules[i][2]);
-                    this.vehicules[i][2]++;
+                    this.vehicules[i][2]--;
                     //System.out.println("valeur position du véhicule après : "+this.vehicules[i][2]);
                 }else{
                     this.vehicules[i][1]++;
@@ -94,8 +104,8 @@ public class RushHourState extends State implements HasHeuristic {
                 break;
             }
         }
-
-
+        this.board = convertirVehiculesToBoard();
+        this.convV = convertTo1DArray(vehicules);
     }
 
     /*
@@ -105,13 +115,15 @@ public class RushHourState extends State implements HasHeuristic {
         for (int i = 0 ; i < this.vehicules.length ; i++) {
             if (this.vehicules[i][0]==num){
                 if (this.vehicules[i][3]==1){
-                    this.vehicules[i][2]--;
+                    this.vehicules[i][2]++;
                 }else{
                     this.vehicules[i][1]--;
                 }
                 break;
             }
         }
+        this.board = convertirVehiculesToBoard();
+        this.convV = convertTo1DArray(vehicules);
 
     }
 
@@ -122,17 +134,39 @@ public class RushHourState extends State implements HasHeuristic {
 
     @Override
     protected boolean equalsState(State o) {
-        return Arrays.equals(this.board, ((RushHourState) o).getBoard());
+        //int[] e = ((RushHourState) o).convertTo1DArray(((RushHourState) o).getVehicules());
+        return Arrays.equals(convV,((RushHourState) o).getConvV());
+    }
+
+    public int[] convertTo1DArray(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        int[] result = new int[rows * cols];
+        int index = 0;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                result[index++] = matrix[i][j];
+            }
+        }
+
+        return result;
+    }
+
+    public int[] getConvV(){
+        return convV;
     }
 
     public int[][] getBoard(){
         return board;
     }
 
+    public int[][] getVehicules(){return vehicules;}
 
     @Override
     protected int hashState() {
-        return Arrays.hashCode(vehicules);
+        return Arrays.hashCode(convV);
     }
 
     @Override
@@ -175,42 +209,54 @@ public class RushHourState extends State implements HasHeuristic {
     }
 
     public boolean DeplacementLegal(String direction, int num) {
+
         switch (direction) {
             case "UP" -> {
+                //System.out.println("UP"+ num);
+                //System.out.println("le numéro du véhicule = " + num);
                 int placement = vehicules[num][2];
                 if (placement == 0) return false;
                 int vehicule = board[placement - 1][vehicules[num][1]];
-                if (vehicule != -1) return false;
+
+                //System.out.println("véhicule ou pas ? " +vehicule);
+                if (vehicule > -1) return false;
                 return true;
             }
 
             case "DOWN" -> {
                 System.out.println("DOWN");
-                Arrays.stream(vehicules).forEach(e-> System.out.println(Arrays.toString(e)));
+                System.out.println("le numéro du véhicule = "+ num);
                 int placement = vehicules[num][2] + vehicules[num][4] - 1;
-                System.out.println("ah le placement = " + placement);
+                System.out.println("placement = " +placement);
+                imprimer();
                 if (placement == 5) return false;
+
                 int vehicule = board[placement + 1][vehicules[num][1]];
-                if (vehicule != -1) return false;
-                System.out.println("c'est okey");
+                System.out.println("véhicule ou pas ? " +vehicule);
+                if (vehicule > -1) return false;
                 return true;
             }
 
             case "LEFT" -> {
-
+                //System.out.println("LEFT");
+                //System.out.println("le numéro du véhicule = " + num);
                 int placement = vehicules[num][1];
                 if (placement == 0) return false;
                 int vehicule = board[vehicules[num][2]][placement - 1];
-                if (vehicule != -1) return false;
+                //System.out.println("véhicule ou pas ? " +vehicule);
+                if (vehicule > -1) return false;
                 return true;
             }
 
             case "RIGHT" -> {
 
+                //System.out.println("RIGHT");
+                //System.out.println("le numéro du véhicule = " + num);
                 int placement = vehicules[num][1] + vehicules[num][4] - 1;
                 if (placement == 5) return false;
                 int vehicule = board[vehicules[num][2]][placement + 1];
-                if (vehicule != -1) return false;
+                //System.out.println("véhicule ou pas ? " +vehicule);
+                if (vehicule > -1) return false;
                 return true;
 
             }

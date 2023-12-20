@@ -1,11 +1,13 @@
 package ia.algo.recherche;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import ia.framework.common.Action;
 import ia.framework.common.State;
 import ia.framework.recherche.TreeSearch;
 import ia.framework.recherche.SearchProblem;
 import ia.framework.recherche.SearchNode;
+import ia.problemes.RushHourState;
 
 public class BFS extends TreeSearch {
 
@@ -36,22 +38,27 @@ public class BFS extends TreeSearch {
                 explored.add(actuel.getState());
 //              Étendre les enfants du noeud
                 ArrayList<Action> actions = problem.getActions(actuel.getState());
+                System.out.println(actions+"\n");
 //              Pour chaque noeud enfant
 
                 for (Action a : actions) {
                     SearchNode childnode = SearchNode.makeChildSearchNode(problem, actuel, a);
+                    System.out.println("\n");
 //                  S'il n'est pas dans la frontière et si son état n'a pas été visité
-                    if (!frontier.contains(childnode) && !explored.contains(childnode.getState())) {
-                        //System.out.println("test");
-                        frontier.add(childnode);
 
+                    if (childnode.getState() instanceof RushHourState){
+                        System.out.println("State visité ? " + Arrays.deepToString(((RushHourState) childnode.getState()).getBoard()));
+                    }
+                    System.out.println(explored.contains(childnode.getState()));
+                    System.out.println("explored size : "+explored.size());
+                    if (!frontier.contains(childnode) && !explored.contains(childnode.getState())) {
+                        frontier.add(childnode);
                     }
                 }
             }
         }
 //      Retourner échec
         return false;
-
     }
 
 }

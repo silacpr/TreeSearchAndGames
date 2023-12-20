@@ -35,18 +35,6 @@ public class RushHour extends SearchProblem {
     }
 
 
-    public static final RushHourState GOAL_STATE =
-            new RushHourState(new int[][] {
-                    {0,0,0,0,0,0},
-                    {0,0,0,0,0,0},
-                    {0,0,0,0,1,1},
-                    {0,0,0,0,0,0},
-                    {0,0,0,0,0,0},
-                    {0,0,0,0,0,0}
-            } );
-
-
-
     public boolean isGoalState(State s){
         if (s instanceof RushHourState){
             return (((RushHourState) s).vehicules)[0][1] == 4;
@@ -66,12 +54,9 @@ public class RushHour extends SearchProblem {
         for (Action a : ACTIONS)
             if (s instanceof RushHourState){
                 if(((RushHourState)s).isLegal(a)) {
-                    //System.out.println("c'est légal");
                     actions.add(a);
                 }
             }
-        //System.out.println("From getActions() : "+actions.size());
-
         return actions;
     }
 
@@ -80,10 +65,8 @@ public class RushHour extends SearchProblem {
         RushHourState r = null;
         if (s instanceof RushHourState){
             r = (RushHourState) s.clone();
-            //System.out.println("il garde rien");
         }
         // on copie l'état courant et on le modifie
-        //System.out.println("est ce que c'est vide ici? " + r);
         if (VEHICULE1_UP.equals(a)) {
             r.moveForward(1);
         } else if (VEHICULE1_DOWN.equals(a)) {
@@ -107,7 +90,10 @@ public class RushHour extends SearchProblem {
         } else {
             throw new IllegalArgumentException("Invalid " + a);
         }
+
         r.imprimer();
+        System.out.println("\n");
+
         return r;
     }
 }

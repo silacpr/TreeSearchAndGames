@@ -245,10 +245,10 @@ public class ArgParse {
             return new RandomSearch(p,s);
         case "bfs":
             return new BFS(p,s);
-            /*
+
         case "dfs":
             return new DFS(p,s);
-
+/*
         case "ucs":
             return new UCS(p,s);
         case "gfs":

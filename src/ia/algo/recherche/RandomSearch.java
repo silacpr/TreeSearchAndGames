@@ -32,7 +32,7 @@ public class RandomSearch extends TreeSearch{
         while( !problem.isGoalState(state) ) {
             // Les actions possibles depuis cette état
             ArrayList<Action> actions = problem.getActions(state);
-            System.out.println(actions.size());
+            //System.out.println(actions.size());
             // En chosir une au hasard
             Action a = actions.get(rng.nextInt(actions.size()));
 

@@ -31,7 +31,7 @@ public class LancerRecherche {
 //        String algo_name = ArgParse.getAlgoFromCmd(args);
 
         String prob_name = new String("rh");
-        String algo_name = ArgParse.getAlgoFromCmd(args);
+        String algo_name = new String("bfs");
 
         // créer un problem, un état intial et un  algo
         SearchProblem p = ArgParse.makeProblem(prob_name);
