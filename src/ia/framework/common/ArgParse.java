@@ -2,7 +2,6 @@ package ia.framework.common;
 
 import java.util.Arrays;
 
-import ia.framework.common.*;
 import ia.framework.recherche.*;
 import ia.framework.jeux.*;
 import ia.problemes.*;
@@ -212,10 +211,7 @@ public class ArgParse {
 
         case "minmaxab":
             System.out.println("c'est minmax");
-            return new MinMaxPlayer(game, p1);
-        case "minmax":
-                System.out.println("c'est minmax");
-                return new MinMaxPlayerBis(game, p1);
+            return new MinMaxAlphaBetaPlayer(game, p1);
         default :
             System.out.println("Joueur inconnu");
             usage();

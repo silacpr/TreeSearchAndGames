@@ -7,11 +7,11 @@ import ia.framework.jeux.Player;
 
 import java.util.List;
 
-public class MinMaxPlayer extends Player {
+public class MinMaxAlphaBetaPlayer extends Player {
 
     public int profondeurMax = 10;
 
-    public MinMaxPlayer(Game g, boolean p1) {
+    public MinMaxAlphaBetaPlayer(Game g, boolean p1) {
         super(g, p1);
         name = "MinMax";
     }
@@ -37,7 +37,7 @@ public class MinMaxPlayer extends Player {
     private SearchResult maxValeur(GameState state, double alpha, double beta, int profondeur) {
         //System.out.println("la profondeur = " + profondeur);
         if (game.endOfGame(state)) {
-            return new SearchResult(evaluate(state), null);
+            return new SearchResult(state.getGameValue(), null);
         }
 
         double vmax = Double.NEGATIVE_INFINITY;
@@ -68,7 +68,7 @@ public class MinMaxPlayer extends Player {
     private SearchResult minValeur(GameState state, double alpha, double beta, int profondeur) {
         //System.out.println("la profondeur = " + profondeur);
         if (game.endOfGame(state)) {
-            return new SearchResult(evaluate(state), null);
+            return new SearchResult(state.getGameValue(), null);
         }
 
         double vmin = Double.POSITIVE_INFINITY;
@@ -107,16 +107,4 @@ public class MinMaxPlayer extends Player {
         }
     }
 
-    private double evaluate(GameState state) {
-        // Utilisez la propriété game_value pour évaluer la qualité de l'état
-        // Plus la valeur est élevée, meilleure est la situation pour le joueur actuel
-
-        if (player == 0) {
-            // Plus la valeur du joueur 1 est élevée, meilleure est la situation pour lui
-            return state.getGameValue();
-        } else {
-            // Plus la valeur du joueur 2 est élevée, meilleure est la situation pour lui
-            return -state.getGameValue(); // Inverser la valeur pour le joueur 2
-        }
-    }
 }
